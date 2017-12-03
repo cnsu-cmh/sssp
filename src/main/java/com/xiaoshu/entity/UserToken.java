@@ -5,7 +5,10 @@ import java.util.Date;
 
 import javax.persistence.*;
 
-public class Token implements Serializable {
+import org.springframework.format.annotation.DateTimeFormat;
+
+@Entity
+public class UserToken implements Serializable {
     
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -29,14 +32,20 @@ public class Token implements Serializable {
     /**
      * 创建时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss")
     private Date createTime;
 
     /**
      * 到期时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss")
     private Date expireTime;
 
     private static final long serialVersionUID = 1L;
+
+    
+	public UserToken() {
+	}
 
 	public Long getTokenId() {
 		return tokenId;

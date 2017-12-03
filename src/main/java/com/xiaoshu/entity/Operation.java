@@ -3,6 +3,7 @@ package com.xiaoshu.entity;
 import java.io.Serializable;
 import javax.persistence.*;
 
+@Entity
 public class Operation implements Serializable {
     /**
      * 具体的方法
@@ -28,6 +29,9 @@ public class Operation implements Serializable {
     private String operationCode;
 
     private static final long serialVersionUID = 1L;
+
+    public Operation() {
+    }
 
 	public Long getOperationId() {
 		return operationId;
@@ -69,5 +73,4 @@ public class Operation implements Serializable {
 		this.operationCode = operationCode;
 	}
 
-    
 }

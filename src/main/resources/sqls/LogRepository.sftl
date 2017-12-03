@@ -1,0 +1,13 @@
+--pageLogCreateBetween
+SELECT * 
+FROM Log 
+WHERE createTime BETWEEN :startTime AND :endTime
+<#if module??>
+	AND module like :module
+</#if>
+<#if module??>
+	AND operation LIKE :operation
+</#if>
+<#if module??>
+	AND username = :username
+</#if>

@@ -5,15 +5,12 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<context:component-scan base-package="com.xiaoshu">
+	<context:component-scan base-package="com.slyak,com.xiaoshu">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
 	</context:component-scan>
-
-	<!-- 注解方式注入 -->
-	<context:annotation-config />
 	
 	<!-- Spring的配置文件，这里主要配置和业务逻辑有关的 -->
 	<!--=================== 数据源，事务控制，xxx ================ -->
@@ -66,6 +63,11 @@
 		<property name="maxPoolSize" value="${jdbc.maxPoolSize}"></property>
 	</bean>
 	
+	<!--自定义sql模板-->
+	<bean class="com.slyak.spring.jpa.FreemarkerSqlTemplates"> 
+		<property name="suffix" value=".sftl"/>
+	</bean>
+	
 	<!-- 配置 JPA 的 EntityManagerFactory -->
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -73,7 +75,7 @@
 		<property name="jpaVendorAdapter">
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"></bean>
 		</property>	
-		<property name="packagesToScan" value="com.xiaoshu"></property>
+		<property name="packagesToScan" value="com.xiaoshu.entity"></property>
 		<property name="jpaProperties">
 			<props>
 				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
@@ -95,11 +97,15 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory"></property>	
 	</bean>
 	
+	<!-- 配置 SpringData 扫描 SpringDataJpa 仓库-->
+	<jpa:repositories base-package="com.xiaoshu.dao" entity-manager-factory-ref="entityManagerFactory"
+		base-class="com.slyak.spring.jpa.GenericJpaRepositoryImpl"  factory-class="com.slyak.spring.jpa.GenericJpaRepositoryFactoryBean">
+	</jpa:repositories>
+
+	<!-- 注解方式注入 -->
+	<context:annotation-config />
+	
 	<!-- 配置支持基于注解的事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager"/>
-	
-	<!-- 配置 SpringData 扫描 SpringDataJpa 仓库-->
-	<jpa:repositories base-package="com.xiaoshu.dao" entity-manager-factory-ref="entityManagerFactory"></jpa:repositories>
-
 	
 </beans>

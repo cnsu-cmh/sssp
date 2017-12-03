@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+@Entity
 public class Log implements Serializable {
     /**
      * 日志
@@ -20,6 +23,7 @@ public class Log implements Serializable {
     /**
      * 时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss")
     private Date createTime;
 
     /**
@@ -43,6 +47,10 @@ public class Log implements Serializable {
     private String content;
 
     private static final long serialVersionUID = 1L;
+
+    
+	public Log() {
+	}
 
 	public Long getLogId() {
 		return logId;

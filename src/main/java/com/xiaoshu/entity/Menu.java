@@ -1,10 +1,10 @@
 package com.xiaoshu.entity;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.*;
 
+@Entity
 public class Menu implements Serializable {
     
 	/**
@@ -25,11 +25,9 @@ public class Menu implements Serializable {
     private String menuUrl;
     
     /**
-     * 所有孩子菜单
+     * 父菜单Id
      */
-    @OneToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL,targetEntity=MenuChildren.class,orphanRemoval=true)
-    @JoinColumn(name="childrenIds",referencedColumnName="menuId")
-    private Set<MenuChildren> children;
+    private Long parentId;
 
     /**
      * 描述
@@ -52,6 +50,10 @@ public class Menu implements Serializable {
     private Integer seq;
 
     private static final long serialVersionUID = 1L;
+
+    
+	public Menu() {
+	}
 
 	public Long getMenuId() {
 		return menuId;
@@ -77,12 +79,12 @@ public class Menu implements Serializable {
 		this.menuUrl = menuUrl == null ? null : menuUrl.trim();
 	}
 
-	public Set<MenuChildren> getChildren() {
-		return children;
+	public Long getParentId() {
+		return parentId;
 	}
 
-	public void setChildren(Set<MenuChildren> children) {
-		this.children = children;
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
 	}
 
 	public String getMenuDescription() {

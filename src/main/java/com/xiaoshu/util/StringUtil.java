@@ -41,12 +41,6 @@ public class StringUtil {
 	 */
 	public static boolean existStrArr(String str,String []strArr){
 		return Arrays.asList(strArr).contains(str);
-		/*for(int i=0;i<strArr.length;i++){
-			if(strArr[i].equals(str)){
-				return true;
-			}
-		}
-		return false;*/
 	}
 	
 	/**
@@ -63,18 +57,62 @@ public class StringUtil {
 	}
 	
 	/**
-	 * String[]转Set<Integer> 并去除重复元素
-	 * Integer[] 可有Set<Integer>.toArray()取得
+	 * String[]转Set<Long> 并去除重复元素
+	 * Long[] 可有Set<Long>.toArray()取得
 	 * @param arrs
 	 * @return
 	 */
-	public static Set<Integer> stringArrToIntergerSet(String[] arrs){
-	    Set<Integer> integerSet = new HashSet<Integer>();
+	public static Set<Long> stringArrToLongSet(String[] arrs){
+	    Set<Long> longSet = new HashSet<Long>();
 	    for(int i=0;i<arrs.length;i++){
-	    	integerSet.add(Integer.parseInt(arrs[i]));
+	    	longSet.add(Long.parseLong(arrs[i]));
 	    }
-	    return integerSet;
+	    return longSet;
 	}
 	
+	/**
+	 * 去除String[]里面空元素,并判断数组是否是空数组
+	 * @param arrs
+	 * @return
+	 */
+	public static boolean stringArrIsEmpty(String[] arrs){
+		String[] strAtt = stringArrRemoveEmpty(arrs);
+		return (strAtt == null || strAtt.length ==0);
+	}
 	
+	/**
+	 * 去除String[]里面空元素
+	 * @param arrs
+	 * @return
+	 */
+	public static String[] stringArrRemoveEmpty(String[] arrs){
+		if(arrs == null || arrs.length == 0){
+			return null;
+		}else{
+		
+			//用StringBuffer来存放数组中的非空元素，用“;”分隔
+	        StringBuffer sb = new StringBuffer();
+	        for(int i=0; i<arrs.length; i++) {
+	            if("".equals(arrs[i])) {
+	                continue;
+	            }
+	            sb.append(arrs[i]);
+	            if(i != arrs.length - 1) {
+	                sb.append(";");
+	            }
+	        }
+	        //用String的split方法分割，得到数组
+	        return sb.length() == 0 ? null :sb.toString().split(";");
+		}
+	}
+	
+	public static void main(String[] args) {
+        String[] aa = {"","","","",""};
+        /*String[] stringArrRemoveEmpty = stringArrRemoveEmpty(aa);
+        for(int i=0; i<stringArrRemoveEmpty.length; i++) {
+            System.out.print(stringArrRemoveEmpty[i] + " ");
+        }*/
+        System.out.println();
+        System.out.println(stringArrIsEmpty(aa));
+	}
 }

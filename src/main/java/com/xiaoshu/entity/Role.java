@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+@Entity
 public class Role implements Serializable {
 	
     /**
@@ -22,15 +23,15 @@ public class Role implements Serializable {
     /**
      * 菜单IDs
      */
-    @OneToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL,targetEntity=Menu.class,orphanRemoval=true)
-    @JoinColumn(name="menuIds",referencedColumnName="menuId")
+    @ManyToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL,targetEntity=Menu.class)
+    @JoinColumn(name="menuIds",referencedColumnName="roleId")
     private Set<Menu> menuIds;
 
     /**
      * 按钮IDS
      */
-    @OneToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL,targetEntity=Operation.class,orphanRemoval=true)
-    @JoinColumn(name="operationIds",referencedColumnName="operationId")
+    @ManyToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL,targetEntity=Operation.class)
+    @JoinColumn(name="operationIds",referencedColumnName="roleId")
     private Set<Operation> operationIds;
 
     /**
@@ -39,6 +40,10 @@ public class Role implements Serializable {
     private String roleDescription;
     
     private static final long serialVersionUID = 1L;
+
+    
+	public Role() {
+	}
 
 	public Long getRoleId() {
 		return roleId;

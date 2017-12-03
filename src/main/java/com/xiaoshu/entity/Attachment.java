@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+@Entity
 public class Attachment implements Serializable {
     /**
      * 附件ID
@@ -25,9 +28,15 @@ public class Attachment implements Serializable {
     /**
      * 时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss")
     private Date attachmentTime;
 
     private static final long serialVersionUID = 1L;
+    
+    
+
+	public Attachment() {
+	}
 
 	public Long getAttachmentId() {
 		return attachmentId;
