@@ -10,7 +10,7 @@ public class User implements Serializable {
      * 用户ID
      */
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long userId;
 
     /**
@@ -31,8 +31,8 @@ public class User implements Serializable {
     /**
      * 角色
      */
-    @ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.ALL,targetEntity=Role.class)
-    @JoinColumn(name="roleId",referencedColumnName="roleId")
+    @ManyToOne(optional = false)
+    @JoinColumn(name="roleId")
     private Role roleId;
 
     /**

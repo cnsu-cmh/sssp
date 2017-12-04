@@ -9,4 +9,5 @@ import com.xiaoshu.entity.UserToken;
 public interface TokenRepository extends GenericJpaRepository<UserToken, Long>  {
 
 	List<UserToken> findByTokenAndExpireTimeGreaterThanEqual(String token, Date expireTime);
+
 }

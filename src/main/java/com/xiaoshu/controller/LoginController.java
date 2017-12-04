@@ -1,10 +1,12 @@
 package com.xiaoshu.controller;
 
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +25,7 @@ import com.xiaoshu.entity.UserToken;
 import com.xiaoshu.entity.User;
 import com.xiaoshu.service.LogService;
 import com.xiaoshu.service.MenuService;
+import com.xiaoshu.service.RoleService;
 import com.xiaoshu.service.TokenService;
 import com.xiaoshu.service.UserService;
 import com.xiaoshu.util.CodeUtil;
@@ -40,6 +43,8 @@ public class LoginController {
 	@Autowired
 	private UserService userService;
 	@Autowired
+	private RoleService roleService;
+	@Autowired
 	private MenuService menuService;
 	@Autowired
 	private LogService logService;
@@ -54,14 +59,14 @@ public class LoginController {
 	public void login(HttpServletRequest request,HttpServletResponse response) throws Exception{
 		try {
 			HttpSession session = request.getSession();
-			String userName=request.getParameter("userName");
+			String username=request.getParameter("username");
 			String password=request.getParameter("password");
 			String imageCode=request.getParameter("imageCode");
 			String auto = request.getParameter("auto");
-			request.setAttribute("userName", userName);
+			request.setAttribute("userName", username);
 			request.setAttribute("password", password);
 			request.setAttribute("imageCode", imageCode);
-			if(StringUtil.isEmpty(userName)||StringUtil.isEmpty(password)){
+			if(StringUtil.isEmpty(username)||StringUtil.isEmpty(password)){
 				request.setAttribute("error", "账户或密码为空");
 				request.getRequestDispatcher("login.jsp").forward(request, response);
 				return;
@@ -77,7 +82,7 @@ public class LoginController {
 				return;
 			}
 			User user = new User();
-			user.setUsername(userName);
+			user.setUsername(username);
 			user.setPassword(password);
 			User currentUser = userService.loginUser(user);
 			if(currentUser==null){
@@ -86,7 +91,7 @@ public class LoginController {
 			}else{
 				// 加入登陆日志
 				Log log = new Log();
-				log.setUsername(userName);
+				log.setUsername(username);
 				log.setCreateTime(new Date());
 				log.setIp(IpUtil.getIpAddr(request));
 				log.setOperation("登录");
@@ -150,9 +155,9 @@ public class LoginController {
 	public void getMenuTree(String parentId,User currentUser,HttpServletRequest request,HttpServletResponse response) throws Exception{
 		try {
 			
-			Role role = currentUser.getRoleId();
+			Role role = roleService.findOneRole(currentUser.getRoleId().getRoleId());
 			if(role != null && !role.getMenuIds().isEmpty()){
-				Set<Menu> menuIds = role.getMenuIds();
+				Set<Menu> menuIds = role.getMenuIds().stream().sorted(Comparator.comparing(Menu::getSeq)).collect(Collectors.toSet());
 				Map map = new HashMap();
 				map.put("parentId",parentId);
 				map.put("menuIds", menuIds);
@@ -265,7 +270,7 @@ public class LoginController {
 					  Map map = new HashMap();
 					  map.put("token", cookie.getValue());
 					  map.put("expireTime", new Date());
-					  UserToken token = tokenService.findByTokenAndExpireTimeGreaterThanOrEqualTo(map);
+					  UserToken token = tokenService.findByTokenAndExpireTimeGreaterThanOrEqual(map);
 					  if (token == null) {
 						  request.getRequestDispatcher("login.jsp").forward(request, response);
 						  return;

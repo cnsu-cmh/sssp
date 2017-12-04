@@ -12,7 +12,7 @@ public class Log implements Serializable {
      * 日志
      */
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long logId;
 
     /**

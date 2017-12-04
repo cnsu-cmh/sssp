@@ -11,7 +11,7 @@ public class Menu implements Serializable {
      * 菜单ID
      */
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long menuId;
 
     /**

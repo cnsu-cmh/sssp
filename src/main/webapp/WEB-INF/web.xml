@@ -61,6 +61,12 @@
 		<url-pattern>*.htm</url-pattern>
 	</servlet-mapping>
 	
+	
+	<welcome-file-list>
+		<welcome-file>login.jsp</welcome-file>
+	</welcome-file-list>
+	
+	
 	<jsp-config>
 		<taglib>
 			<taglib-uri>/privilege</taglib-uri>

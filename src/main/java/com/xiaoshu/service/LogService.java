@@ -29,7 +29,7 @@ public class LogService {
 	};
 
 	public Page<Log> pageLogCreateBetween(String start, String end, Log log, int pageNumber, int pageSize, String ordername, String order) throws Exception {
-		ordername = StringUtil.isNotEmpty(ordername)?ordername:"userid";
+		ordername = StringUtil.isNotEmpty(ordername)?ordername:"logId";
 		order = StringUtil.isNotEmpty(order)?order:"desc";
 		Calendar cal = Calendar.getInstance();
 		Date startDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("1900-01-01 00:00:00");
@@ -50,7 +50,9 @@ public class LogService {
 		if(StringUtil.isNotEmpty(log.getOperation())){
 			conditionMap.put("operation","%"+log.getOperation()+"%");
 		}
-		conditionMap.put("username",log.getUsername());
+		if(StringUtil.isNotEmpty(log.getUsername())){
+			conditionMap.put("operation","%"+log.getOperation()+"%");
+		}
 		conditionMap.put("startTime",startTime);
 		conditionMap.put("endTime",endTime);
 		Pageable pageable = PageRequestUtil.buildPageRequest(pageNumber,pageSize,order,new String[]{ordername});

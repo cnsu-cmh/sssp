@@ -12,7 +12,7 @@ public class Role implements Serializable {
      * 角色ID
      */
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long roleId;
 
     /**
@@ -23,15 +23,15 @@ public class Role implements Serializable {
     /**
      * 菜单IDs
      */
-    @ManyToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL,targetEntity=Menu.class)
-    @JoinColumn(name="menuIds",referencedColumnName="roleId")
+    @ManyToMany
+    @JoinColumn(name="menuIds")
     private Set<Menu> menuIds;
 
     /**
      * 按钮IDS
      */
-    @ManyToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL,targetEntity=Operation.class)
-    @JoinColumn(name="operationIds",referencedColumnName="roleId")
+    @ManyToMany
+    @JoinColumn(name="operationIds")
     private Set<Operation> operationIds;
 
     /**

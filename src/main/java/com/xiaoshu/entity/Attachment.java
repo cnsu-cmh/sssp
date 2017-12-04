@@ -12,7 +12,7 @@ public class Attachment implements Serializable {
      * 附件ID
      */
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long attachmentId;
 
     /**

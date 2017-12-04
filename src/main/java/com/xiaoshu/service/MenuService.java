@@ -1,6 +1,8 @@
 package com.xiaoshu.service;
 
 
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,7 +39,8 @@ public class MenuService {
 	public Set<Menu> menuTree(Map map) {
 		Long parentId = (Long)map.get("parentId");
 		Set<Menu> menuSet = (Set<Menu>) map.get("menuIds");
-		Set<Menu> menus = menuSet.stream().filter(m -> m.getParentId().compareTo(parentId) == 0).collect(Collectors.toSet());
+		Set<Menu> menus = menuSet.stream().filter(m -> m.getParentId().compareTo(parentId) == 0)
+				.sorted(Comparator.comparing(Menu::getSeq)).collect(Collectors.toSet());
 		return menus;
 	}
 
@@ -47,6 +50,13 @@ public class MenuService {
 
 	public long countMenuByParentId(long parentId) {
 		return menuRepository.countByParentId(parentId);
+	}
+
+	public Set<Menu> findAll() {
+		Set<Menu> set = new HashSet<Menu>();
+		List<Menu> list = menuRepository.findAll();
+		set.addAll(list);
+		return set;
 	}
 
 }

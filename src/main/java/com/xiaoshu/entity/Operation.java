@@ -9,7 +9,7 @@ public class Operation implements Serializable {
      * 具体的方法
      */
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long operationId;
 
     /**
@@ -20,8 +20,8 @@ public class Operation implements Serializable {
     /**
      * 所属菜单
      */
-    @ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.ALL,targetEntity=Menu.class)
-    @JoinColumn(name="menuId",referencedColumnName="menuId")
+    @ManyToOne(optional = false)
+    @JoinColumn(name="menuId")
     private Menu menuId;
     
     private String iconCls;

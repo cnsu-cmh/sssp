@@ -1,6 +1,8 @@
 package com.xiaoshu.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,6 +44,13 @@ public class OperationService {
 
 	public Operation findByOperationId(long operationId) {
 		return operationRepository.findOne(operationId);
+	}
+
+	public Set<Operation> findAll() {
+		Set<Operation> set = new HashSet<Operation>();
+		List<Operation> list = operationRepository.findAll();
+		set.addAll(list);
+		return set;
 	}
 
 }

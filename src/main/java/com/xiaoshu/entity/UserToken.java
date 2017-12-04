@@ -11,7 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class UserToken implements Serializable {
     
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long tokenId;
 
     /**

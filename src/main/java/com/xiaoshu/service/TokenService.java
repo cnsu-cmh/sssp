@@ -21,7 +21,7 @@ public class TokenService {
 	};
 
 	@SuppressWarnings("rawtypes")
-	public UserToken findByTokenAndExpireTimeGreaterThanOrEqualTo(Map map) {
+	public UserToken findByTokenAndExpireTimeGreaterThanOrEqual(Map map) {
 		String token = (String) map.get("token");
 		Date expireTime = (Date) map.get("expireTime");
 		List<UserToken> tokenList = tokenRepository.findByTokenAndExpireTimeGreaterThanEqual(token,expireTime);
