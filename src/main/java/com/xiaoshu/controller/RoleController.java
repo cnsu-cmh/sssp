@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,19 +55,14 @@ public class RoleController {
 	@RequestMapping("roleList")
 	public void userList(HttpServletRequest request,HttpServletResponse response,String offset,String limit){
 		try {
-			Role role = new Role();
-			String rolename = request.getParameter("rolename");
+			String roleName = request.getParameter("roleName");
 			String order = request.getParameter("order");
 			String ordername = request.getParameter("ordername");
-			if (StringUtil.isNotEmpty(rolename)) {
-				role.setRoleName(rolename);
-			}
-			role.setRoleName(rolename);
 			Integer pageSize = StringUtil.isEmpty(limit)?ConfigUtil.getPageSize():Integer.parseInt(limit);
 			Integer pageNum =  (Integer.parseInt(offset)/pageSize)+1;
-			Page<Role> pageInfo = roleService.PageRoleByRoleName(rolename,pageNum,pageSize,ordername,order);
+			Page<Role> pageInfo = roleService.PageRoleByRoleName(roleName,pageNum,pageSize,ordername,order);
 			JSONObject jsonObj = new JSONObject();
-			request.setAttribute("rolename",rolename);
+			request.setAttribute("rolename",roleName);
 			jsonObj.put("total",pageInfo.getTotalPages() );
 			jsonObj.put("rows", pageInfo.getContent());
 	        WriterUtil.write(response,jsonObj.toString());
@@ -133,8 +129,8 @@ public class RoleController {
 	}
 	
 	@RequestMapping("rightCtrl")
-	public String chooseMenu(HttpServletRequest request,Integer roleid){
-		request.setAttribute("roleid",roleid);
+	public String chooseMenu(HttpServletRequest request,Integer roleId){
+		request.setAttribute("roleId",roleId);
 		return "rightCtrl";
 	}
 	
@@ -211,7 +207,8 @@ public class RoleController {
 				jsonObject.put("operationname", o.getOperationName());
 				jsonObject.put("iconcls", o.getIconCls());
 				if (operationIds.size() > 0) {
-					if (operationIds.contains(operationId)) {
+					Set<Long> collect = operationIds.stream().map(op -> op.getOperationId()).collect(Collectors.toSet());
+					if (collect.contains(operationId)) {
 						jsonObject.put("checked", true);
 					} 	
 				}
@@ -231,8 +228,8 @@ public class RoleController {
 			String roleid = request.getParameter("roleid");
 			String menuids = request.getParameter("menuids");
 			String operationids = request.getParameter("operationids");
-			Role role = new Role();
-			role.setRoleId(Long.parseLong(roleid));
+			
+			Role role = roleService.findOneRole(Long.parseLong(roleid));
 			if (StringUtil.isNotEmpty(menuids)) {
 				String[] menuArrIds = menuids.split(",");
 				Set<Menu> menuidsStr = getMenuIdAndParentMenuId(menuArrIds);

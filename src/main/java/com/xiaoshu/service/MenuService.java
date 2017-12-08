@@ -36,11 +36,11 @@ public class MenuService {
 		return menuRepository.findOne(menuid);
 	}
 
-	public Set<Menu> menuTree(Map map) {
+	public List<Menu> menuTree(Map map) {
 		Long parentId = (Long)map.get("parentId");
-		Set<Menu> menuSet = (Set<Menu>) map.get("menuIds");
-		Set<Menu> menus = menuSet.stream().filter(m -> m.getParentId().compareTo(parentId) == 0)
-				.sorted(Comparator.comparing(Menu::getSeq)).collect(Collectors.toSet());
+		List<Menu> menuSet = (List<Menu>) map.get("menuIds");
+		List<Menu> menus = menuSet.stream().filter(m -> m.getParentId().compareTo(parentId) == 0)
+				.sorted(Comparator.comparing(Menu::getSeq)).collect(Collectors.toList());
 		return menus;
 	}
 

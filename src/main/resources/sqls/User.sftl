@@ -1,8 +1,9 @@
 --findUsernameAndRole
-SELECT * FROM User WHERE 1=1
+SELECT u.userId,u.username,u.password,u.userType,u.userDescription,r.roleId,r.roleName 
+ FROM User u INNER JOIN Role r ON u.roleId=r.roleId WHERE 1=1 
 <#if username??>
-AND username LIKE :username
+ AND u.username LIKE :username 
 </#if>
-<#if roleid??>
-AND roleId = :roleid
+<#if roleId??>
+ AND r.roleId = :roleId
 </#if>

@@ -22,7 +22,7 @@ import com.xiaoshu.service.RoleService;
 import com.xiaoshu.service.UserService;
 import com.xiaoshu.util.StringUtil;
 import com.xiaoshu.util.WriterUtil;
-
+import com.xiaoshu.vo.UserVo;
 import com.alibaba.fastjson.JSONObject;
 
 @Controller
@@ -54,16 +54,14 @@ public class UserController extends LogController{
 	public void userList(HttpServletRequest request,HttpServletResponse response,String offset,String limit) throws Exception{
 		try {
 			String username = request.getParameter("username");
-			String roleid = request.getParameter("roleid");
-			String usertype = request.getParameter("usertype");
+			String roleId = request.getParameter("roleId");
 			String order = request.getParameter("order");
 			String ordername = request.getParameter("ordername");
 			Integer pageSize = StringUtil.isEmpty(limit)?ConfigUtil.getPageSize():Integer.parseInt(limit);
 			Integer pageNum =  (Integer.parseInt(offset)/pageSize)+1;
-			Page<User> userList= userService.findUserPage(username,roleid,pageNum,pageSize,ordername,order);
+			Page<UserVo> userList= userService.findUserPage(username,roleId,pageNum,pageSize,ordername,order);
 			request.setAttribute("username", username);
-			request.setAttribute("roleid", roleid);
-			request.setAttribute("usertype", usertype);
+			request.setAttribute("roleId", roleId);
 			JSONObject jsonObj = new JSONObject();
 			jsonObj.put("total",userList.getTotalPages());
 			jsonObj.put("rows", userList.getContent());
@@ -78,13 +76,15 @@ public class UserController extends LogController{
 	
 	// 新增或修改
 	@RequestMapping("reserveUser")
-	public void reserveUser(HttpServletRequest request,User user,HttpServletResponse response){
+	public void reserveUser(HttpServletRequest request,User user,Long roleid,HttpServletResponse response){
 		Long userId = user.getUserId();
 		JSONObject result=new JSONObject();
 		try {
 			if (userId != null) {   // userId不为空 说明是修改
 				User userName = userService.existUserWithUserName(user.getUsername());
 				if(userName != null && userName.getUserId().compareTo(userId)==0){
+					Role role = roleService.findOneRole(roleid);
+					user.setRoleId(role);
 					userService.updateUser(user);
 					result.put("success", true);
 				}else{
@@ -94,6 +94,8 @@ public class UserController extends LogController{
 				
 			}else {   // 添加
 				if(userService.existUserWithUserName(user.getUsername())==null){  // 没有重复可以添加
+					Role role = roleService.findOneRole(roleid);
+					user.setRoleId(role);
 					userService.addUser(user);
 					result.put("success", true);
 				} else {

@@ -1,12 +1,16 @@
 package com.xiaoshu.controller;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.xiaoshu.entity.Log;
 import com.xiaoshu.entity.Menu;
+import com.xiaoshu.entity.Operation;
 import com.xiaoshu.entity.Role;
 import com.xiaoshu.entity.UserToken;
 import com.xiaoshu.entity.User;
@@ -100,8 +105,9 @@ public class LoginController {
 				// 登录信息存入session
 				Role role = currentUser.getRoleId();
 				session.setAttribute("currentUser", currentUser);  // 当前用户信息
-				session.setAttribute("currentOperationIds", role.getOperationIds());  // 当前用户所拥有的按钮权限
-				
+				session.setAttribute("currentOperationIds",role.getOperationIds().stream()
+												.map(o -> o.getOperationId().toString())
+												.collect(Collectors.joining(",")));  // 当前用户所拥有的按钮权限
 				// 勾选了两周内自动登录。
 				if ("on".equals(auto)) {
 					// 记住登录信息
@@ -155,9 +161,9 @@ public class LoginController {
 	public void getMenuTree(String parentId,User currentUser,HttpServletRequest request,HttpServletResponse response) throws Exception{
 		try {
 			
-			Role role = roleService.findOneRole(currentUser.getRoleId().getRoleId());
+			Role role = currentUser.getRoleId();
 			if(role != null && !role.getMenuIds().isEmpty()){
-				Set<Menu> menuIds = role.getMenuIds().stream().sorted(Comparator.comparing(Menu::getSeq)).collect(Collectors.toSet());
+				List<Menu> menuIds = role.getMenuIds().stream().sorted(Comparator.comparing(Menu::getSeq)).collect(Collectors.toList());
 				Map map = new HashMap();
 				map.put("parentId",parentId);
 				map.put("menuIds", menuIds);
@@ -172,7 +178,7 @@ public class LoginController {
 	
 	
 	// 递归加载所所有树菜单
-	public JSONArray getMenusByParentId(String parentId,Set<Menu> menuIds)throws Exception{
+	public JSONArray getMenusByParentId(String parentId,List<Menu> menuIds)throws Exception{
 		JSONArray jsonArray = this.getMenuByParentId(parentId,menuIds);
 		for(int i=0;i<jsonArray.size();i++){
 			JSONObject jsonObject=jsonArray.getJSONObject(i);
@@ -186,12 +192,12 @@ public class LoginController {
 	}
 	
 	// 将所有的树菜单放入json数据中
-	public JSONArray getMenuByParentId(String parentId,Set<Menu> menuIds)throws Exception{
+	public JSONArray getMenuByParentId(String parentId,List<Menu> menuIds)throws Exception{
 		JSONArray jsonArray = new JSONArray();
 		Map map= new HashMap();
 		map.put("parentId",Long.parseLong(parentId));
 		map.put("menuIds", menuIds);
-		Set<Menu> list = menuService.menuTree(map);
+		List<Menu> list = menuService.menuTree(map);
 		for(Menu menu : list){
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("id", menu.getMenuId());
@@ -214,8 +220,8 @@ public class LoginController {
 			Map map= new HashMap();
 			map.put("parentId",parentId);
 			map.put("menuIds", menuIds);
-			Set<Menu> set = menuService.menuTree(map);
-			if (set == null || set.size()==0) {
+			List<Menu> list = menuService.menuTree(map);
+			if (list == null || list.size()==0) {
 				flag = false;
 			}else {
 				flag = true;
@@ -272,6 +278,9 @@ public class LoginController {
 					  map.put("expireTime", new Date());
 					  UserToken token = tokenService.findByTokenAndExpireTimeGreaterThanOrEqual(map);
 					  if (token == null) {
+						  cookie = new Cookie(cookies[i].getName(), null);
+						  cookie.setMaxAge(0);
+						  response.addCookie(cookie);
 						  request.getRequestDispatcher("login.jsp").forward(request, response);
 						  return;
 					  } else {
@@ -288,7 +297,9 @@ public class LoginController {
 							Role role = currentUser.getRoleId();
 							HttpSession session = request.getSession();
 							session.setAttribute("currentUser", currentUser);  // 当前用户信息
-							session.setAttribute("currentOperationIds", role.getOperationIds());  // 当前用户所拥有的按钮权限
+							session.setAttribute("currentOperationIds",role.getOperationIds().stream()
+																		.map(o -> o.getOperationId().toString())
+																		.collect(Collectors.joining(",")));  // 当前用户所拥有的按钮权限
 							// 跳转到主界面
 							response.sendRedirect("main.htm");
 							return;

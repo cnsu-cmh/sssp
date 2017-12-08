@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.xiaoshu.dao.RoleRepository;
 import com.xiaoshu.entity.Role;
 import com.xiaoshu.util.PageRequestUtil;
+import com.xiaoshu.util.StringUtil;
 
 @Service
 public class RoleService {
@@ -50,7 +51,11 @@ public class RoleService {
 	
 	public Page<Role> PageRoleByRoleName(String roleName, Integer pageNumber, Integer pageSize, String ordername, String order) {
 		Pageable pageable = PageRequestUtil.buildPageRequest(pageNumber, pageSize, order, new String[]{ordername});
-		return roleRepository.findByRoleName(roleName,pageable);
+		if(StringUtil.isNotEmpty(roleName)){
+			return roleRepository.findByRoleNameLike("%"+roleName+"%",pageable);
+		}else{
+			return roleRepository.findAll(pageable);
+		}
 	}
 
 

@@ -1,6 +1,10 @@
 package com.xiaoshu.controller;
 
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,7 +21,7 @@ import com.xiaoshu.service.MenuService;
 import com.xiaoshu.service.OperationService;
 import com.xiaoshu.util.StringUtil;
 import com.xiaoshu.util.WriterUtil;
-
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 @Controller
@@ -32,25 +36,28 @@ public class OperationController {
 	private MenuService menuService;
 
 	@RequestMapping("operationIndex")
-	public String index(HttpServletRequest request,HttpServletResponse response,@RequestParam("menuid") String menuid){
+	public String index(HttpServletRequest request,HttpServletResponse response,@RequestParam("menuId") String menuId){
 		
-		if(StringUtil.isNotEmpty(menuid)){
-			Menu menu = menuService.findByMenuId(Long.parseLong(menuid));
-			request.setAttribute("menuid",menuid);
-			request.setAttribute("menuname",menu.getMenuName());
+		if(StringUtil.isNotEmpty(menuId)){
+			Menu menu = menuService.findByMenuId(Long.parseLong(menuId));
+			request.setAttribute("menuId",menuId);
+			request.setAttribute("menuName",menu.getMenuName());
 		}
 		
 		return "operation";
 	}
 	
 	@RequestMapping("operationList")
-	public void list(HttpServletRequest request,HttpServletResponse response,Long menuid,Integer page,Integer rows){
+	public void list(HttpServletRequest request,HttpServletResponse response,Long menuId,Integer page,Integer rows){
 		try {
-			Page<Operation> pageinfo = operationService.pageByMenuId(menuid,page,rows);
+			Page<Operation> pageinfo = operationService.pageByMenuId(menuId,page,rows);
 			JSONObject jsonObj = new JSONObject();//new一个JSON
 			jsonObj.put("total",pageinfo.getTotalPages());
 			jsonObj.put("records", pageinfo.getTotalElements());
-			jsonObj.put("rows", pageinfo.getContent());
+			Object object = JSONArray.toJSON(pageinfo.getContent());
+			/*Map<Long, Operation> collect = pageinfo.getContent().stream().collect(Collectors.toMap(Operation::getOperationId, operation -> operation));
+			Collection<Operation> values = collect.values();*/
+			jsonObj.put("rows", object);
 	        WriterUtil.write(response,jsonObj.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,8 +67,10 @@ public class OperationController {
 	}
 	
 	@RequestMapping("reserveOperation")
-	public void reserveMenu(HttpServletRequest request,HttpServletResponse response,Operation operation){
+	public void reserveMenu(HttpServletRequest request,HttpServletResponse response,Operation operation,Long menuid){
 		Long operationId = operation.getOperationId();
+		Menu menu = menuService.findByMenuId(menuid);
+		operation.setMenuId(menu);
 		JSONObject result=new JSONObject();
 		try {
 			if (operationId != null) {  //更新操作

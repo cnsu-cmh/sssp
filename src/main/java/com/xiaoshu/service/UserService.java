@@ -13,6 +13,7 @@ import com.xiaoshu.dao.UserRepository;
 import com.xiaoshu.entity.User;
 import com.xiaoshu.util.PageRequestUtil;
 import com.xiaoshu.util.StringUtil;
+import com.xiaoshu.vo.UserVo;
 
 @Service
 public class UserService {
@@ -59,13 +60,13 @@ public class UserService {
 	}
 
 	
-	public Page<User> findUserPage(String username, String roleid,int pageNumber, int pageSize, String ordername, String order) {
+	public Page<UserVo> findUserPage(String username, String roleId,int pageNumber, int pageSize, String ordername, String order) {
 		Map<String,Object> conditionMap = new HashMap<String, Object>();
 		if (StringUtil.isNotEmpty(username)) {
 			conditionMap.put("username","%"+username+"%");
 		}
-		if (StringUtil.isNotEmpty(roleid) && !"0".equals(roleid)) {
-			conditionMap.put("roleid",roleid);
+		if (StringUtil.isNotEmpty(roleId) && !"0".equals(roleId)) {
+			conditionMap.put("roleId",roleId);
 		}
 		ordername = StringUtil.isNotEmpty(ordername)?ordername:"userId";
 		order = StringUtil.isNotEmpty(order)?order:"desc";

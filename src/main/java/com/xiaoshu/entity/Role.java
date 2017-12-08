@@ -23,15 +23,16 @@ public class Role implements Serializable {
     /**
      * 菜单IDs
      */
-    @ManyToMany
-    @JoinColumn(name="menuIds")
+    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.REMOVE},fetch=FetchType.EAGER)
+    @JoinTable(name="roleMenuIds",joinColumns = { @JoinColumn(name ="roleId" )}, inverseJoinColumns = { @JoinColumn(name = "menuId") })
+    @OrderBy("seq")
     private Set<Menu> menuIds;
 
     /**
      * 按钮IDS
      */
-    @ManyToMany
-    @JoinColumn(name="operationIds")
+    @ManyToMany(cascade =  {CascadeType.MERGE,CascadeType.REMOVE},fetch=FetchType.EAGER)
+    @JoinTable(name="roleOperationIds",joinColumns = { @JoinColumn(name ="roleId" )}, inverseJoinColumns = { @JoinColumn(name = "operationId") })
     private Set<Operation> operationIds;
 
     /**

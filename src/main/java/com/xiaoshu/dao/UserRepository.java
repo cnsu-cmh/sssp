@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import com.slyak.spring.jpa.GenericJpaRepository;
 import com.slyak.spring.jpa.TemplateQuery;
 import com.xiaoshu.entity.User;
+import com.xiaoshu.vo.UserVo;
 
 
 public interface UserRepository extends GenericJpaRepository<User, Long>  {
@@ -21,5 +22,5 @@ public interface UserRepository extends GenericJpaRepository<User, Long>  {
 	List<User> findByRoleIdRoleId(Long roleId);
 
 	@TemplateQuery
-	Page<User> findUsernameAndRole(@Param(value = "condition")Map<String, Object> conditionMap, Pageable pageRequest);
+	Page<UserVo> findUsernameAndRole(@Param(value = "condition")Map<String, Object> conditionMap, Pageable pageRequest);
 }

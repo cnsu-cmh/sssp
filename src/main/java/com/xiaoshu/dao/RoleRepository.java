@@ -13,5 +13,6 @@ public interface RoleRepository extends GenericJpaRepository<Role, Long>  {
 
 	List<Role> findByRoleName(String roleName);
 
-	Page<Role> findByRoleName(String roleName, Pageable pageable);
+	Page<Role> findByRoleNameLike(String roleName, Pageable pageable);
+
 }
