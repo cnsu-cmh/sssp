@@ -5,9 +5,9 @@ WHERE createTime BETWEEN :startTime AND :endTime
 <#if module??>
 	AND module like :module
 </#if>
-<#if module??>
+<#if operation??>
 	AND operation LIKE :operation
 </#if>
-<#if module??>
+<#if username??>
 	AND username = :username
 </#if>

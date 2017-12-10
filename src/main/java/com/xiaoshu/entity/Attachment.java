@@ -6,6 +6,8 @@ import javax.persistence.*;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.xiaoshu.util.ServletRequestAttributesUtil;
+
 @Entity
 public class Attachment implements Serializable {
     /**
@@ -55,7 +57,7 @@ public class Attachment implements Serializable {
 	}
 
 	public String getAttachmentPath() {
-		return attachmentPath;
+		return ServletRequestAttributesUtil.getServletContextPath()+attachmentPath;
 	}
 
 	public void setAttachmentPath(String attachmentPath) {
@@ -69,5 +71,5 @@ public class Attachment implements Serializable {
 	public void setAttachmentTime(Date attachmentTime) {
 		this.attachmentTime = attachmentTime;
 	}
-
+	
 }

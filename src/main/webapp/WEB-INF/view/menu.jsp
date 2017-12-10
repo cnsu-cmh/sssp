@@ -86,21 +86,21 @@
 					datatype : "json",
 					treeGrid : true,//ture则为树形表格
 					treeGridModel : "adjacency",
-					ExpandColumn : "menuname",//展开的列
+					ExpandColumn : "menuName",//展开的列
 					ExpandColClick : true,//树形表格是否展开
 					height : "400",
 					autowidth : true,
 					colNames : [ '菜单编号', '父节点', '状态', '菜单名称', '图标',
 							'样式','包含按钮', '路径', '顺序', '备注' ],
 					colModel : [ {
-						name : "menuid",
-						index : "menuid",
+						name : "menuId",
+						index : "menuId",
 						hidden : true,
 						editable : true,
 						key : true
 					}, {
-						name : "parentid",
-						index : "parentid",
+						name : "parentId",
+						index : "parentId",
 						hidden : true,
 						editable : true,
 						editrules : {
@@ -109,10 +109,11 @@
 					}, {
 						name : "state",
 						index : "state",
-						hidden : true
+						hidden : true,
+						editable : true
 					}, {
-						name : "menuname",
-						index : "menuname",
+						name : "menuName",
+						index : "menuName",
 						hidden : false,
 						editable : true,
 						editrules : {
@@ -122,11 +123,11 @@
 						name : "",
 						editable : false,
 						formatter : function(cellvalue, options, rowObject){
-							return '<span class="'+rowObject.iconcls+'" aria-hidden="true"></span>';
+							return '<span class="'+rowObject.iconCls+'" aria-hidden="true"></span>';
 						}
 					}, {
-						name : "iconcls",
-						index : "iconcls",
+						name : "iconCls",
+						index : "iconCls",
 						editable : true
 					},{
 						name : "operationnames",
@@ -134,8 +135,8 @@
 						hidden : false,
 						editable : false
 					}, {
-						name : "menuurl",
-						index : "menuurl",
+						name : "menuUrl",
+						index : "menuUrl",
 						hidden : false,
 						editable : true
 					}, {
@@ -149,8 +150,8 @@
 						}
 
 					}, {
-						name : "menudescription",
-						index : "menudescription",
+						name : "menuDescription",
+						index : "menuDescription",
 						hidden : false,
 						editable : true
 					} ],
@@ -203,7 +204,7 @@
 						reloadAfterSubmit : true,
 					    beforeShowForm : function(frm) {
 					    	var ids = $("#table_menu").jqGrid('getGridParam', 'selrow');
-					    	frm.find('#parentid').val(parentid.value == '' ? ids : parentid.value);
+					    	frm.find('#parentId').val(parentId.value == '' ? ids : parentId.value);
 						},
 						closeAfterAdd : true
 					},

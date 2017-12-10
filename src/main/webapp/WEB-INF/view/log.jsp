@@ -16,7 +16,7 @@
 	<div class="panel-body">
 		<div id="toolbar" class="btn-group">
 			<c:forEach items="${operationList}" var="oper">
-				<privilege:operation operationId="${oper.operationid }" id="${oper.operationcode }" name="${oper.operationname }" clazz="${oper.iconcls }"  color="#093F4D"></privilege:operation>
+				<privilege:operation operationId="${oper.operationId }" id="${oper.operationCode }" name="${oper.operationName }" clazz="${oper.iconCls }"  color="#093F4D"></privilege:operation>
 			</c:forEach>
         </div>
         <div class="row">
@@ -45,7 +45,7 @@
 	          </button>
 			</div>
 			<div class="form-horizontal m-t">			  
-			  <div class="form-group col-lg-7">
+			  <div class="form-group col-lg-12">
                  <label class="col-sm-2 control-label">操作时间</label>
                  <div class="col-sm-8">
                      <input placeholder="开始时间" id="txt_search_start" name="start" class="laydate-icon form-control layer-date"/>
@@ -285,7 +285,7 @@ Date.prototype.Format = function (fmt) {
 		var idArr = new Array();
 		var ids;
 		getSelections.forEach(function(item){
-			idArr.push(item.logid);
+			idArr.push(item.logId);
 		});
 		ids = idArr.join(",");
 		$.ajax({
@@ -338,7 +338,7 @@ Date.prototype.Format = function (fmt) {
 		    type: 2,
 		    title:'日志备份记录',
 		    skin: 'layui-layer-rim', //加上边框
-		    area: ['1000px', '600px'], //宽高
+		    area: ['1100px', '600px'], //宽高
 		    maxmin: true, //开启最大化最小化按钮
 		    content: 'attachment/attachmentIndex.htm'
 		});

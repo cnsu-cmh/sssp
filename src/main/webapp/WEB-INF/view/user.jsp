@@ -279,6 +279,7 @@
 	    		$('#password').attr("readOnly",false).val(getSelection.password);
 	    		$("#form_user").resetForm();
 	    		document.getElementById("hidden_txt_userId").value='';
+	    		document.getElementById("userDescription").value='';
 	    		$('#modal_user_edit').modal({backdrop: 'static', keyboard: false});
 				$('#modal_user_edit').modal('show');
 	        });
@@ -319,7 +320,7 @@
 	
 	function initEditUser(getSelection){
 		$('#hidden_txt_userId').val(getSelection.userId);
-		$('#roleid').val(getSelection.roleId);
+		$('#roleId').val(getSelection.roleId);
 		$('#username').val(getSelection.username);
 		$('#userDescription').val(getSelection.userDescription);
 		$('#password').attr("readOnly",true).val(getSelection.password);

@@ -1,16 +1,13 @@
 package com.xiaoshu.controller;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -24,13 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.xiaoshu.entity.Log;
 import com.xiaoshu.entity.Menu;
-import com.xiaoshu.entity.Operation;
 import com.xiaoshu.entity.Role;
 import com.xiaoshu.entity.UserToken;
 import com.xiaoshu.entity.User;
 import com.xiaoshu.service.LogService;
 import com.xiaoshu.service.MenuService;
-import com.xiaoshu.service.RoleService;
 import com.xiaoshu.service.TokenService;
 import com.xiaoshu.service.UserService;
 import com.xiaoshu.util.CodeUtil;
@@ -47,8 +42,6 @@ public class LoginController {
 
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private RoleService roleService;
 	@Autowired
 	private MenuService menuService;
 	@Autowired

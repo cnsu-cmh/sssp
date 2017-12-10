@@ -61,7 +61,7 @@
 	            cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
 	            pagination: true,                   //是否显示分页（*）
 	            sortable: true,                     //是否启用排序
-	            sortName: "attachmentid",
+	            sortName: "attachmentId",
 	            sortOrder: "desc",                   //排序方式
 	            queryParams: oLogTableInit.queryParams,//传递参数（*）
 	            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
@@ -83,20 +83,20 @@
 	                checkbox: true
 	            },
 	            {
-	                field: 'attachmentid',
+	                field: 'attachmentId',
 	                title: '备份日志id',
 	                hidden: true
 	            },
 	            {
-	                field: 'attachmentname',
+	                field: 'attachmentName',
 	                title: '文件名称',
 	                sortable:true
 	            }, {
-	                field: 'attachmentpath',
+	                field: 'attachmentPath',
 	                title: '文件路径',
 	                sortable:true
 	            }, {
-	                field: 'attachmenttime',
+	                field: 'attachmentTime',
 	                title: '备份时间',
 	                formatter:function(value,row,index){
 	                	return new Date(value).Format('yyyy-MM-dd HH:mm:ss');

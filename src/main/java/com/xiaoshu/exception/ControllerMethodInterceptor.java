@@ -4,21 +4,19 @@ import java.lang.reflect.Method;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.alibaba.fastjson.JSONObject;
 import com.xiaoshu.entity.Log;
 import com.xiaoshu.entity.User;
 import com.xiaoshu.service.LogService;
 import com.xiaoshu.util.IpUtil;
+import com.xiaoshu.util.ServletRequestAttributesUtil;
 import com.xiaoshu.util.TimeUtil;
 import com.xiaoshu.util.WriterUtil;
 
@@ -46,7 +44,7 @@ public class ControllerMethodInterceptor implements MethodInterceptor {
 			logger.debug("出错了======>"+info.toString()+"========>"+TimeUtil.formatTime(new Date(), "yyyy-MM-dd HH:mm:ss"));
 			logger.debug(NEWLINE+e.getMessage());
 			Log log = new Log();
-			HttpServletRequest request = getCurrentRequest();
+			HttpServletRequest request = ServletRequestAttributesUtil.getCurrentRequest();
 			if(request != null){
 				User currentUser = (User) request.getSession().getAttribute("currentUser");
 				if(currentUser == null ){
@@ -70,32 +68,9 @@ public class ControllerMethodInterceptor implements MethodInterceptor {
 			logService.insertLog(log);
 			JSONObject result = new JSONObject();
 			result.put("errorMsg", "对不起！系统错误，请联系管理员。");
-			WriterUtil.write(getCurrentResponse(), result.toString());
+			WriterUtil.write(ServletRequestAttributesUtil.getCurrentResponse(), result.toString());
 		}
 		return proceed;
 	}
-	
-	private HttpServletRequest getCurrentRequest(){
-        ServletRequestAttributes requestAttrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (requestAttrs == null) {
-        	logger.debug("当前线程中不存在 Request 上下文");
-        	return null;
-        }else{
-        	return requestAttrs.getRequest();
-        }
-        
-    }
-	
-	private HttpServletResponse getCurrentResponse(){
-		ServletRequestAttributes requestAttrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-		 if (requestAttrs == null) {
-        	logger.debug("当前线程中不存在 Request 上下文");
-        	return null;
-        }else{
-        	return requestAttrs.getResponse();
-        }
-    }
-	
-	
 	
 }

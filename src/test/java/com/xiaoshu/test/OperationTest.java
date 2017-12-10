@@ -124,6 +124,13 @@ public class OperationTest {
 			operation14.setMenuId(menu4);
 			operationService.addOperation(operation14);
 			
+			Operation operation15 = new Operation();
+			operation15.setOperationCode("btn_downloadLogBus");
+			operation15.setOperationName("备份日志记录");
+			operation15.setIconCls("glyphicon glyphicon-download");
+			operation15.setMenuId(menu4);
+			operationService.addOperation(operation15);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -1,11 +1,7 @@
 package com.xiaoshu.vo;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
-import com.xiaoshu.entity.Role;
-
 public class UserVo {
+	
 	private Long userId;
 
     /**
@@ -32,6 +28,11 @@ public class UserVo {
      * 角色名称
      */
     private String roleName;
+    
+    /**
+     * 描述信息
+     */
+    private String userDescription;
 
 	public Long getUserId() {
 		return userId;
@@ -80,7 +81,13 @@ public class UserVo {
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
-    
-    
 
+	public String getUserDescription() {
+		return userDescription;
+	}
+
+	public void setUserDescription(String userDescription) {
+		this.userDescription = userDescription;
+	}
+    
 }

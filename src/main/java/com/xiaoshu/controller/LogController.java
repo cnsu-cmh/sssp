@@ -33,6 +33,7 @@ import com.xiaoshu.service.AttachmentService;
 import com.xiaoshu.service.LogService;
 import com.xiaoshu.service.OperationService;
 import com.xiaoshu.util.PropertiesUtil;
+import com.xiaoshu.util.ServletRequestAttributesUtil;
 import com.xiaoshu.util.StringUtil;
 import com.xiaoshu.util.TimeUtil;
 import com.xiaoshu.util.WriterUtil;
@@ -187,9 +188,15 @@ public class LogController{
 			}
 			//写出文件（path为文件路径含文件名）
 				OutputStream os;
-				File file = new File(request.getSession().getServletContext().getRealPath("/")+"logs"+File.separator+"backup"+File.separator+excleName+".xls");
+				String servletContextPath = ServletRequestAttributesUtil.getServletContextPath();
+				File file = new File(servletContextPath+"logs"+File.separator+"backup"+File.separator+excleName+".xls");
 				
-				if (!file.exists()){//若此目录不存在，则创建之  
+				if (!file.exists()){//若此目录不存在，则创建之 
+					File backupfile = new File(servletContextPath+"logs"+File.separator+"backup");
+					if (!backupfile.exists() && !backupfile .isDirectory())      
+					{       
+						backupfile .mkdirs();    
+					}
 					file.createNewFile();  
 					logger.debug("创建文件夹路径为："+ file.getPath());  
 	            } 
@@ -209,7 +216,7 @@ public class LogController{
 		String path = PropertiesUtil.url;
 		File file = new File(path);
 		HttpHeaders headers = new HttpHeaders();
-		String fileName = new String("ssm.log".getBytes("UTF-8"), "iso-8859-1");
+		String fileName = new String("sssp.log".getBytes("UTF-8"), "iso-8859-1");
 		headers.setContentDispositionFormData("attachment", fileName);
 		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 		return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),headers, HttpStatus.CREATED);

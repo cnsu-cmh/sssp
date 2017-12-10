@@ -139,12 +139,9 @@ public class UserController extends LogController{
 		HttpSession session = request.getSession();
 		User currentUser = (User) session.getAttribute("currentUser");
 		if(currentUser.getPassword().equals(oldpassword)){
-			User user = new User();
-			user.setUserId(currentUser.getUserId());
-			user.setPassword(newpassword);
 			try {
-				userService.updateUser(user);
 				currentUser.setPassword(newpassword);
+				userService.updateUser(currentUser);
 				session.removeAttribute("currentUser"); 
 				session.setAttribute("currentUser", currentUser);
 				result.put("success", true);

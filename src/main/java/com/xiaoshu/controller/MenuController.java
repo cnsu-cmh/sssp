@@ -74,7 +74,7 @@ public class MenuController {
 			if(!"isParent".equals(jsonObject.getString("state"))){
 				continue;
 			}else{
-				resultJsonArray.addAll(getListByParentId(jsonObject.getString("menuid"),++l));
+				resultJsonArray.addAll(getListByParentId(jsonObject.getString("menuId"),++l));
 			}
 		}
 		return resultJsonArray;
@@ -87,14 +87,14 @@ public class MenuController {
 		for(Menu m : list){
 			JSONObject jsonObject = new JSONObject();
 			Long menuId = m.getMenuId();
-			jsonObject.put("menuid", menuId);
-			jsonObject.put("menuname", m.getMenuName());
-			jsonObject.put("parentid", m.getParentId());
-			jsonObject.put("iconcls", m.getIconCls());
+			jsonObject.put("menuId", menuId);
+			jsonObject.put("menuName", m.getMenuName());
+			jsonObject.put("parentId", m.getParentId());
+			jsonObject.put("iconCls", m.getIconCls());
 			jsonObject.put("state", m.getState());
 			jsonObject.put("seq", m.getSeq());
-			jsonObject.put("menuurl", m.getMenuUrl());
-			jsonObject.put("menudescription", m.getMenuDescription());
+			jsonObject.put("menuUrl", m.getMenuUrl());
+			jsonObject.put("menuDescription", m.getMenuDescription());
 			jsonObject.put("level", l);
 			jsonObject.put("isLeaf", (StringUtil.isEmpty(m.getState())||"close".equals(m.getState()) ));
 			jsonObject.put("parent", m.getParentId().compareTo(new Long(0))>0?m.getParentId():null);
@@ -137,8 +137,7 @@ public class MenuController {
 					menuService.addMenu(menu);  
 					
 					// 更新他上级状态。变成isParent
-					menu = new Menu();
-					menu.setMenuId(Long.parseLong(parentId));
+					menu = menuService.findByMenuId(Long.parseLong(parentId));
 					menu.setState("isParent");
 					menuService.updateMenu(menu);
 				} else {
@@ -190,11 +189,11 @@ public class MenuController {
 					// 只有一个孩子，删除该孩子，且把父亲状态置为""或close
 					Menu parentMenu = menuService.findByMenuId(Long.parseLong(parentId));
 					if(parentMenu.getParentId().compareTo(1L) == 0){
-						menu.setState("close");
+						parentMenu.setState("close");
 					}else{
-						menu.setState("");
+						parentMenu.setState(null);
 					}
-					menuService.updateMenu(menu);
+					menuService.updateMenu(parentMenu);
 					
 					menuService.deleteMenu(id);
 				} else {

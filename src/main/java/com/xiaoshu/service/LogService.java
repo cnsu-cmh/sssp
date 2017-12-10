@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -51,10 +53,10 @@ public class LogService {
 			conditionMap.put("operation","%"+log.getOperation()+"%");
 		}
 		if(StringUtil.isNotEmpty(log.getUsername())){
-			conditionMap.put("operation","%"+log.getOperation()+"%");
+			conditionMap.put("username", log.getUsername());
 		}
-		conditionMap.put("startTime",startTime);
-		conditionMap.put("endTime",endTime);
+		conditionMap.put("startTime",TimeUtil.formatTime(startTime, "yyyy-MM-dd HH:mm:ss"));
+		conditionMap.put("endTime",TimeUtil.formatTime(endTime, "yyyy-MM-dd HH:mm:ss"));
 		Pageable pageable = PageRequestUtil.buildPageRequest(pageNumber,pageSize,order,new String[]{ordername});
 		return logRepository.pageLogCreateBetween(conditionMap,pageable);
 	};
@@ -63,6 +65,7 @@ public class LogService {
 		logRepository.delete(l);
 	};
 
+	@Transactional
 	public void truncateLog() throws Exception {
 		logRepository.truncateTable();
 	}
