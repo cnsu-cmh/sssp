@@ -43,10 +43,10 @@ if(auto){
             <div class="col-sm-7">
                 <div class="signin-info">
                     <div class="logopanel m-b">
-                        <h1>[ -SSM- ]</h1>
+                        <h1>[ -SSSP- ]</h1>
                     </div>
                     <div class="m-b"></div>
-                    <h4>欢迎使用 <strong>SSM</strong></h4>
+                    <h4>欢迎使用 <strong>SSSP</strong></h4>
                     <ul class="m-b">
                         <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势一</li>
                         <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势二</li>
@@ -59,7 +59,7 @@ if(auto){
             </div>
             <div class="col-sm-5">
                 <form id="form1" name="form1" action="${path }/login.htm" method="post">
-                    <h4 class="no-margins">欢迎登录到SSM：</h4>
+                    <h4 class="no-margins">欢迎登录到SSSP：</h4>
                     <input type="text" class="form-control uname" placeholder="用户名" name="username" id="username" required="required" value="${username }"/>
                     <input type="password" class="form-control pword m-b" placeholder="密码" id="password" name="password" required="required" value="${password }"
 						onkeydown="if(event.keyCode==13)form1.submit()" />
